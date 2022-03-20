@@ -18,6 +18,15 @@ export class JsonConverter {
     readonly format: string,
   ) {}
 
+  static isJson(value: any): boolean {
+    try {
+      JSON.parse(value)
+      return true
+    } catch (_) {
+      return false
+    }
+  }
+
   updateInputJson(json: {}): JsonConverter {
     return new JsonConverter(json, this.format)
   }
