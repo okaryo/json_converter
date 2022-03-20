@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Fab, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
+import { AppBar, Box, Button, Container, Fab, InputLabel, List, ListItem, ListItemText, TextField, Typography } from '@mui/material'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CheckIcon from '@mui/icons-material/Check'
 import type { NextPage } from 'next'
@@ -51,11 +51,20 @@ const Home: NextPage = () => {
 
       <main>
         <AppBar position="static" sx={{p: 1}}>
-          <Typography variant="h6" component="h1">JsonConverter</Typography>
+          <Typography variant="h5" component="h1">JsonConverter</Typography>
         </AppBar>
 
-        <Container sx={{p: 2, maxWidth: 600}} >
+        <Container sx={{p: 2}} style={{maxWidth: "600px"}} >
           <List>
+            <Box>
+              <Typography variant="h6" component="h3">Usage</Typography>
+              <List>
+                <ListItemText primary="- Input valid format Json in the `Input Json` field." />
+                <ListItemText primary="- Embed the key of the Json in the `Fomat` field by enclosing it in `$`." />
+                <ListItemText primary="- If the input Json is in array format, it will be output as a repeated Format." />
+              </List>
+            </Box>
+
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Input Json</InputLabel>
               <TextField
