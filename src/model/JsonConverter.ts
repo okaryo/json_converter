@@ -10,7 +10,7 @@ type JsonObject = {
   [key: string]: JsonPrimitive | JsonObject | JsonArray
 }
 
-type Json = JsonObject | JsonArray
+export type Json = JsonObject | JsonArray
 
 export class JsonConverter {
   constructor(
