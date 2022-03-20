@@ -64,5 +64,10 @@ export type RootState = ReturnType<typeof rootReducer>
 export const useStore = (): EnhancedStore => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => {
+      return getDefaultMiddleware({
+        serializableCheck: false
+      })
+    }
   })
 }
