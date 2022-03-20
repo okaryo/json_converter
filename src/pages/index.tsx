@@ -45,7 +45,13 @@ const Home: NextPage = () => {
     <div>
       <Head>
         <title>JsonConverter</title>
-        <meta name="description" content="Format JSON as you like" />
+        <meta name="description" content="Format Json as you like" />
+        <meta property="og:url" content="https://okaryo.github.io/json_converter" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="JsonConverter" />
+        <meta property="og:description" content="Format Json as you like" />
+        <meta property="og:site_name" content="JsonConverter" />
+        <meta property="og:image" content={process.env.NODE_ENV === 'production' ? '/json_converter/ogp.png' : '/ogp.png'}/>
         <link rel="icon" href={process.env.NODE_ENV === 'production' ? '/json_converter/favicon.ico' : '/favicon.ico'} />
       </Head>
 
