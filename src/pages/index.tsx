@@ -1,9 +1,32 @@
-import { AppBar, Button, Container, FormControl, Input, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
+import { AppBar, Button, Container, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useDispatch, useSelector } from 'react-redux'
 import Footer from '../components/Footer'
+import { JsonConverter } from '../model/JsonConverter'
+import { converterSlice, RootState } from '../store'
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch()
+  const converter = useSelector((state: RootState) => state.converter.jsonConverter)
+  const output = useSelector((state: RootState) => state.converter.output)
+
+  const onChangeInputJson = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    if (JsonConverter.isJson(value)) {
+      dispatch(converterSlice.actions.updateInputJson(JSON.parse(value)))
+    }
+  }
+
+  const onChangeFormat = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    dispatch(converterSlice.actions.updateFormat(value))
+  }
+
+  const onClickConvert = () => {
+    dispatch(converterSlice.actions.convert())
+  }
+
   return (
     <div>
       <Head>
@@ -22,32 +45,41 @@ const Home: NextPage = () => {
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Input Json</InputLabel>
               <TextField
-                rows={5}
-                defaultValue=""
+                minRows={5}
+                defaultValue={JSON.stringify(converter.inputJson, null, 2)}
                 multiline
                 fullWidth
+                onChange={onChangeInputJson}
               />
             </ListItem>
 
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Format</InputLabel>
               <TextField
-                rows={5}
-                defaultValue=""
+                minRows={5}
+                defaultValue={converter.format}
+                helperText="The Json value is embedded in the key enclosed in `$`."
                 multiline
                 fullWidth
+                onChange={onChangeFormat}
               />
             </ListItem>
 
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
-              <Button variant="contained" sx={{width: "100%"}}>CONVERT</Button>
+              <Button
+                variant="contained"
+                sx={{width: "100%"}}
+                onClick={onClickConvert}
+              >
+                CONVERT
+              </Button>
             </ListItem>
             
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Output</InputLabel>
               <TextField
-                rows={5}
-                defaultValue=""
+                minRows={5}
+                defaultValue={output}
                 multiline
                 fullWidth
               />
