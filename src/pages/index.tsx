@@ -46,7 +46,7 @@ const Home: NextPage = () => {
       <Head>
         <title>JsonConverter</title>
         <meta name="description" content="Format JSON as you like" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={process.env.NODE_ENV === 'production' ? '/json_converter/favicon.ico' : '/favicon.ico'} />
       </Head>
 
       <main>
