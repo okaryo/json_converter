@@ -1,23 +1,23 @@
 import { JsonConverter } from "../src/model/JsonConverter"
 
-describe('#isJson', () => {
+describe('#canConvert', () => {
   describe('when value is valid', () => {
     test('should return true', () => {
-      const actual = JsonConverter.isJson({'key': 'value'})
+      const actual = JsonConverter.canConvert({'key': 'value'})
       expect(actual).toBeTruthy
     })
   })
 
   describe('when value is valid array json', () => {
     test('should return true', () => {
-      const actual = JsonConverter.isJson([{'key': 'value1'}, {'key': 'value2'}])
+      const actual = JsonConverter.canConvert([{'key': 'value1'}, {'key': 'value2'}])
       expect(actual).toBeTruthy
     })
   })
 
   describe('when value is invalid', () => {
     test('should return true', () => {
-      const actual = JsonConverter.isJson('string')
+      const actual = JsonConverter.canConvert('string')
       expect(actual).toBeFalsy
     })
   })
@@ -72,8 +72,7 @@ describe('#convert', () => {
       )
       const actual = jsonConverter.convert()
       const expected = `<li>value1</li>
-<li>value2</li>
-`
+<li>value2</li>`
 
       expect(actual).toEqual(expected)
     })

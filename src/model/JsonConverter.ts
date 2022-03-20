@@ -18,7 +18,7 @@ export class JsonConverter {
     readonly format: string,
   ) {}
 
-  static isJson(value: any): boolean {
+  static canConvert(value: any): boolean {
     try {
       JSON.parse(value)
       return true
@@ -27,7 +27,7 @@ export class JsonConverter {
     }
   }
 
-  updateInputJson(json: {}): JsonConverter {
+  updateInputJson(json: Json): JsonConverter {
     return new JsonConverter(json, this.format)
   }
 
@@ -44,7 +44,7 @@ export class JsonConverter {
           outputs += `${this.replaceByFormat(json)}\n`
         }
       })
-      return outputs
+      return outputs.trim()
     }
 
     if (this.isJsonObjest(this.inputJson)) {
