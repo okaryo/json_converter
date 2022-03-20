@@ -1,4 +1,6 @@
-import { AppBar, Button, Container, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
+import { AppBar, Box, Button, Container, Fab, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import CheckIcon from '@mui/icons-material/Check'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
@@ -6,12 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import Footer from '../components/Footer'
 import { JsonConverter } from '../model/JsonConverter'
 import { converterSlice, RootState } from '../store'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 const Home: NextPage = () => {
   const dispatch = useDispatch()
   const converter = useSelector((state: RootState) => state.converter.jsonConverter)
   const output = useSelector((state: RootState) => state.converter.output)
   const [error, setError] = useState(false)
+  const [copyComplete, setCopyComplete] = useState(false)
 
   const onChangeInputJson = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -30,6 +34,11 @@ const Home: NextPage = () => {
 
   const onClickConvert = () => {
     dispatch(converterSlice.actions.convert())
+  }
+
+  const onCopy = () => {
+    setCopyComplete(true)
+    setTimeout(() => setCopyComplete(false), 3000)
   }
 
   return (
@@ -84,12 +93,21 @@ const Home: NextPage = () => {
             
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Output</InputLabel>
-              <TextField
-                minRows={5}
-                value={output}
-                multiline
-                fullWidth
-              />
+              <Box sx={{width: "100%"}}>
+                <TextField
+                  minRows={5}
+                  value={output}
+                  multiline
+                  fullWidth
+                />
+                <CopyToClipboard text={output}>
+                  {
+                    copyComplete ?
+                    <CheckIcon sx={{position: "absolute", top: 30, right: 3}} color="primary" /> :
+                    <ContentCopyIcon sx={{position: "absolute", top: 30, right: 3}} onClick={onCopy} />
+                  }
+                </CopyToClipboard>
+              </Box>
             </ListItem>
           </List>
         </Container>
