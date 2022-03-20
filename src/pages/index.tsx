@@ -1,6 +1,7 @@
 import { AppBar, Button, Container, InputLabel, List, ListItem, TextField, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Footer from '../components/Footer'
 import { JsonConverter } from '../model/JsonConverter'
@@ -10,11 +11,15 @@ const Home: NextPage = () => {
   const dispatch = useDispatch()
   const converter = useSelector((state: RootState) => state.converter.jsonConverter)
   const output = useSelector((state: RootState) => state.converter.output)
+  const [error, setError] = useState(false)
 
   const onChangeInputJson = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
-    if (JsonConverter.isJson(value)) {
+    if (!JsonConverter.canConvert(value)) {
+      setError(true)
+    } else {
       dispatch(converterSlice.actions.updateInputJson(JSON.parse(value)))
+      setError(false)
     }
   }
 
@@ -47,6 +52,8 @@ const Home: NextPage = () => {
               <TextField
                 minRows={5}
                 defaultValue={JSON.stringify(converter.inputJson, null, 2)}
+                helperText={error ? 'Invalid json format!!' : ''}
+                error={error}
                 multiline
                 fullWidth
                 onChange={onChangeInputJson}
@@ -57,7 +64,7 @@ const Home: NextPage = () => {
               <InputLabel shrink>Format</InputLabel>
               <TextField
                 minRows={5}
-                defaultValue={converter.format}
+                value={converter.format}
                 helperText="The Json value is embedded in the key enclosed in `$`."
                 multiline
                 fullWidth
@@ -79,7 +86,7 @@ const Home: NextPage = () => {
               <InputLabel shrink>Output</InputLabel>
               <TextField
                 minRows={5}
-                defaultValue={output}
+                value={output}
                 multiline
                 fullWidth
               />
