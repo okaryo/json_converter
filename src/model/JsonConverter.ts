@@ -56,8 +56,29 @@ export class JsonConverter {
 
   private replaceByFormat(json: JsonObject): string {
     let output = this.format
-    for (let [key, value] of Object.entries(json)) {
-      output = output.replaceAll(`$${key}$` , value?.toString() ?? '')
+    const matches = Array.from(this.format.matchAll(/\$([^\$]*)\$/g))
+    for (const match of matches) {
+      const target = match[0]
+      const embededKeys = match[1]
+
+      let value: any
+      embededKeys.split('.').forEach(key => {
+        if (value === undefined && !json.hasOwnProperty(key)) {
+          value = target
+          return
+        }
+
+        if (value === undefined) {
+          value = json[key]
+        } else {
+          value = value[key]
+        }
+      })
+      if (this.isJsonObjest(value)) {
+        output = output.replaceAll(target , JSON.stringify(value))
+      } else {
+        output = output.replaceAll(target , value?.toString() ?? '')
+      }
     }
     return output
   }
