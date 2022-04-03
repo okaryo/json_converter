@@ -68,6 +68,7 @@ const Home: NextPage = () => {
                 <ListItemText primary="- Input valid format Json in the `Input Json` field." />
                 <ListItemText primary="- Embed the key of the Json in the `Fomat` field by enclosing it in `$`." />
                 <ListItemText primary="- If the input Json is in array format, it will be output as a repeated Format." />
+                <ListItemText primary="- To get nested Json value, connect kyes with periods `.` like `$key1.key2$`" />
               </List>
             </Box>
 
