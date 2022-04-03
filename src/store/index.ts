@@ -14,27 +14,32 @@ const initialState: State = {
     [
       {
         'url': 'https://example.com/1',
-        'name': 'name1'
+        'author': { 'name': 'name1' },
+        'book': { 'page': 100 }
       },
       {
         'url': 'https://example.com/2',
-        'name': 'name2'
+        'author': { 'name': 'name2' },
+        'book': { 'page': 200 }
       },
     ],
     `<li>
   <a href="$url$">
-    <p>$name$</p>
+    <p>$author.name$</p>
+    <p>$book$</p>
   </a>
 </li>`
     ),
   output: `<li>
   <a href="https://example.com/1">
     <p>name1</p>
+    <p>{"page":100}</p>
   </a>
 </li>
 <li>
   <a href="https://example.com/2">
     <p>name2</p>
+    <p>{"page":200}</p>
   </a>
 </li>`
 }
