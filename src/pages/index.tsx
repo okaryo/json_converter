@@ -1,9 +1,9 @@
-import { AppBar, Box, Button, Container, Fab, InputLabel, List, ListItem, ListItemText, TextField, Typography } from '@mui/material'
+import { AppBar, Box, Button, Checkbox, Container, Fab, FormControlLabel, FormGroup, InputLabel, List, ListItem, ListItemText, TextField, Typography } from '@mui/material'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CheckIcon from '@mui/icons-material/Check'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Footer from '../components/Footer'
 import { JsonConverter } from '../model/JsonConverter'
@@ -30,6 +30,10 @@ const Home: NextPage = () => {
   const onChangeFormat = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
     dispatch(converterSlice.actions.updateFormat(value))
+  }
+
+  const onChangeReverseListCheckbox = (_: React.ChangeEvent<HTMLInputElement>, isChecked: boolean) => {
+    dispatch(converterSlice.actions.updateIsReverseList(isChecked))
   }
 
   const onClickConvert = () => {
@@ -95,6 +99,17 @@ const Home: NextPage = () => {
                 fullWidth
                 onChange={onChangeFormat}
               />
+            </ListItem>
+
+            <ListItem sx={{ p: 0 }}>
+              <FormGroup>
+                <FormControlLabel
+                  label="Reverse(If json is an array, output in reverse order.)"
+                  control={
+                    <Checkbox onChange={onChangeReverseListCheckbox} />
+                  }
+                />
+              </FormGroup>
             </ListItem>
 
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>

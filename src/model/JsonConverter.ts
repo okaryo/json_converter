@@ -16,6 +16,7 @@ export class JsonConverter {
   constructor(
     readonly inputJson: Json,
     readonly format: string,
+    readonly isReverseList: boolean,
   ) {}
 
   static canConvert(value: any): boolean {
@@ -28,18 +29,24 @@ export class JsonConverter {
   }
 
   updateInputJson(json: Json): JsonConverter {
-    return new JsonConverter(json, this.format)
+    return new JsonConverter(json, this.format, this.isReverseList)
   }
 
   updateFormat(format: string): JsonConverter {
-    return new JsonConverter(this.inputJson, format)
+    return new JsonConverter(this.inputJson, format, this.isReverseList)
+  }
+
+  updateIsReverseList(isActive: boolean): JsonConverter {
+    return new JsonConverter(this.inputJson, this.format, isActive)
   }
 
   convert(): string {
     if (this.isJsonArray(this.inputJson)) {
       let outputs = ''
+      let source = [...this.inputJson]
+      if (this.isReverseList) source.reverse()
 
-      this.inputJson.forEach(json => {
+      source.forEach(json => {
         if (this.isJsonObjest(json)) {
           outputs += `${this.replaceByFormat(json)}\n`
         }

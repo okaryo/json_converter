@@ -25,13 +25,13 @@ describe('#canConvert', () => {
 
 describe('#updateInputJson', () => {
   test('should update inputJson', () => {
-    const jsonConverter = new JsonConverter({}, '')
+    const jsonConverter = new JsonConverter({}, '', false)
     const actual = jsonConverter.updateInputJson(
       {
         'key': 'value'
       }
     )
-    const expected = new JsonConverter({'key': 'value'}, '')
+    const expected = new JsonConverter({'key': 'value'}, '', false)
 
     expect(actual).toEqual(expected)
   })
@@ -39,9 +39,19 @@ describe('#updateInputJson', () => {
 
 describe('#updateFormat', () => {
   test('should update format', () => {
-    const jsonConverter = new JsonConverter({}, '')
+    const jsonConverter = new JsonConverter({}, '', false)
     const actual = jsonConverter.updateFormat('new format')
-    const expected = new JsonConverter({}, 'new format')
+    const expected = new JsonConverter({}, 'new format', false)
+
+    expect(actual).toEqual(expected)
+  })
+})
+
+describe('#updateIsReverseList', () => {
+  test('should toggle isReverseList property', () => {
+    const jsonConverter = new JsonConverter({}, '', false)
+    const actual = jsonConverter.updateIsReverseList(true)
+    const expected = new JsonConverter({}, '', true)
 
     expect(actual).toEqual(expected)
   })
@@ -52,7 +62,8 @@ describe('#convert', () => {
     test('should return converted string', () => {
       const jsonConverter = new JsonConverter(
         {'key': 'value'},
-        '<li>$key$</li>'
+        '<li>$key$</li>',
+        false
       )
       const actual = jsonConverter.convert()
       const expected = '<li>value</li>'
@@ -69,7 +80,8 @@ describe('#convert', () => {
             {'key': 'value1'},
             {'key': 'value2'}
           ],
-          '<li>$key$</li>'
+          '<li>$key$</li>',
+          false
         )
         const actual = jsonConverter.convert()
         const expected = `<li>value1</li>
@@ -86,7 +98,8 @@ describe('#convert', () => {
             {'key': 'value1'},
             {'key': 'value2'}
           ],
-          '<li>$keys$</li>'
+          '<li>$keys$</li>',
+          false
         )
         const actual = jsonConverter.convert()
         const expected = `<li>$keys$</li>
@@ -103,7 +116,8 @@ describe('#convert', () => {
             {'key1': { 'key2': 'value1'} },
             {'key1': { 'key2': 'value2'} },
           ],
-          '<li>$key1$</li>'
+          '<li>$key1$</li>',
+          false
         )
         const actual = jsonConverter.convert()
         const expected = `<li>{"key2":"value1"}</li>
@@ -118,11 +132,30 @@ describe('#convert', () => {
             {'key1': { 'key2': 'value1' }},
             {'key1': { 'key2': 'value2' }},
           ],
-          '<li>$key1.key2$</li>'
+          '<li>$key1.key2$</li>',
+          false
         )
         const actual = jsonConverter.convert()
         const expected = `<li>value1</li>
 <li>value2</li>`
+
+        expect(actual).toEqual(expected)
+      })
+    })
+
+    describe('when isReverseList property is true', () => {
+      test('should return reversed json list', () => {
+        const jsonConverter = new JsonConverter(
+          [
+            {'key': 'value1'},
+            {'key': 'value2'}
+          ],
+          '<li>$key$</li>',
+          true
+        )
+        const actual = jsonConverter.convert()
+        const expected = `<li>value2</li>
+<li>value1</li>`
 
         expect(actual).toEqual(expected)
       })

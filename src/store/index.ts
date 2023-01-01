@@ -28,8 +28,9 @@ const initialState: State = {
     <p>$author.name$</p>
     <p>$book$</p>
   </a>
-</li>`
-    ),
+</li>`,
+    false
+  ),
   output: `<li>
   <a href="https://example.com/1">
     <p>name1</p>
@@ -53,6 +54,9 @@ export const converterSlice = createSlice({
     },
     updateFormat(state, action: PayloadAction<UpdateFormatPayload>) {
       state.jsonConverter = state.jsonConverter.updateFormat(action.payload)
+    },
+    updateIsReverseList(state, action: PayloadAction<boolean>) {
+      state.jsonConverter = state.jsonConverter.updateIsReverseList(action.payload)
     },
     convert(state) {
       state.output = state.jsonConverter.convert()
