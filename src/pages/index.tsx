@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Checkbox, Container, Fab, FormControlLabel, FormGroup, InputLabel, List, ListItem, ListItemText, TextField, Typography } from '@mui/material'
+import { AppBar, Box, Button, Checkbox, Container, FormControlLabel, FormGroup, IconButton, InputLabel, List, ListItem, ListItemText, TextField, Typography } from '@mui/material'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CheckIcon from '@mui/icons-material/Check'
 import type { NextPage } from 'next'
@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Footer from '../components/Footer'
 import { JsonConverter } from '../model/JsonConverter'
 import { converterSlice, RootState } from '../store'
-import CopyToClipboard from 'react-copy-to-clipboard'
 
 const Home: NextPage = () => {
   const dispatch = useDispatch()
@@ -40,7 +39,8 @@ const Home: NextPage = () => {
     dispatch(converterSlice.actions.convert())
   }
 
-  const onCopy = () => {
+  const onCopy = async () => {
+    await global.navigator.clipboard.writeText(output);
     setCopyComplete(true)
     setTimeout(() => setCopyComplete(false), 3000)
   }
@@ -124,20 +124,24 @@ const Home: NextPage = () => {
             
             <ListItem sx={{dispaly: "flex", flexDirection: "column", alignItems: "start", p: 0, mb: 3}}>
               <InputLabel shrink>Output</InputLabel>
-              <Box sx={{width: "100%"}}>
+              <Box sx={{width: "100%", position: "relative"}}>
                 <TextField
                   minRows={5}
                   value={output}
                   multiline
                   fullWidth
                 />
-                <CopyToClipboard text={output}>
+                <Box sx={{position: "absolute", top: 0, right: 0}}>
                   {
-                    copyComplete ?
-                    <CheckIcon sx={{position: "absolute", top: 30, right: 3}} color="primary" /> :
-                    <ContentCopyIcon sx={{position: "absolute", top: 30, right: 3}} onClick={onCopy} />
+                    <IconButton onClick={onCopy}>
+                      {
+                        copyComplete ?
+                          <CheckIcon color="primary" /> :
+                          <ContentCopyIcon />
+                      }
+                    </IconButton>
                   }
-                </CopyToClipboard>
+                </Box>
               </Box>
             </ListItem>
           </List>
